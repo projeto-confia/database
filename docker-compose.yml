@@ -9,9 +9,8 @@ services:
     ports:
       - 15432:5432
     volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
       - ./pg_data:/var/lib/postgresql/data
-    networks:
-      - confianet
   pgadmin:
     image: dpage/pgadmin4
     container_name: confia-pgadmin

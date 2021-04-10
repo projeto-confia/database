@@ -13,9 +13,18 @@ Atenção aos valores de senha para o banco e do PgAdmin, essas serão suas cred
 
 Crie uma rede externa do docker com o nome __confia__.
 
-``` bash
+```bash
     docker network create -d bridge confia
 ```
+
+Para iniciar os containers execute:
+
+```bash
+    docker-compose up -d
+```
+## Customização da inicialização
+Arquivos `.sql, .sql.gz e .sh` na pasta init-scipts serão executados na primeira vez que iniciar os containers.
+Mais informações na [documentação da imagem docker postgres](https://hub.docker.com/_/postgres).
 
 ## Licença
 [MIT](https://choosealicense.com/licenses/mit/)
