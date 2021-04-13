@@ -1,6 +1,6 @@
 # Database
 
-Projeto cuja finaliade é criar o banco de dados com os schemas e necessários para executar o AUTOMATA e Painel administrativo.
+Projeto cuja finalidade é criar o banco de dados com os schemas necessários para executar o AUTOMATA e o Painel Administrativo.
 
 ## Requisitos
  - Docker;
@@ -8,8 +8,8 @@ Projeto cuja finaliade é criar o banco de dados com os schemas e necessários p
 
 ## Instalação
 
-Cria um arquivo `.env` usando o arquivo `.env.example` como base.
-Atenção aos valores de senha para o banco e do PgAdmin, essas serão suas credenciais de acesso.
+Crie um arquivo `.env` usando o arquivo `.env.example` como base.
+Atenção aos valores de senha para o banco e PgAdmin, essas serão suas credenciais de acesso.
 
 Crie uma rede externa do docker com o nome __confia__.
 
