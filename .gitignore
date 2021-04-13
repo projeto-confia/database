@@ -3,3 +3,5 @@ pg_data
 pg_backup/*
 !pg_backup/.gitkeep
 .env
+init-scripts/*
+!init-scripts/script_01_schema.sql
