@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.1 (Debian 13.1-1.pgdg100+1)
--- Dumped by pg_dump version 13.1 (Debian 13.1-1.pgdg100+1)
+-- Dumped from database version 13.2 (Debian 13.2-1.pgdg100+1)
+-- Dumped by pg_dump version 13.2 (Debian 13.2-1.pgdg100+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -387,6 +387,131 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: failed_jobs; Type: TABLE; Schema: admin_panel; Owner: admin
+--
+
+CREATE TABLE admin_panel.failed_jobs (
+    id bigint NOT NULL,
+    uuid character varying(255) NOT NULL,
+    connection text NOT NULL,
+    queue text NOT NULL,
+    payload text NOT NULL,
+    exception text NOT NULL,
+    failed_at timestamp(0) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE admin_panel.failed_jobs OWNER TO admin;
+
+--
+-- Name: failed_jobs_id_seq; Type: SEQUENCE; Schema: admin_panel; Owner: admin
+--
+
+CREATE SEQUENCE admin_panel.failed_jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE admin_panel.failed_jobs_id_seq OWNER TO admin;
+
+--
+-- Name: failed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: admin_panel; Owner: admin
+--
+
+ALTER SEQUENCE admin_panel.failed_jobs_id_seq OWNED BY admin_panel.failed_jobs.id;
+
+
+--
+-- Name: migrations; Type: TABLE; Schema: admin_panel; Owner: admin
+--
+
+CREATE TABLE admin_panel.migrations (
+    id integer NOT NULL,
+    migration character varying(255) NOT NULL,
+    batch integer NOT NULL
+);
+
+
+ALTER TABLE admin_panel.migrations OWNER TO admin;
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE; Schema: admin_panel; Owner: admin
+--
+
+CREATE SEQUENCE admin_panel.migrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE admin_panel.migrations_id_seq OWNER TO admin;
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: admin_panel; Owner: admin
+--
+
+ALTER SEQUENCE admin_panel.migrations_id_seq OWNED BY admin_panel.migrations.id;
+
+
+--
+-- Name: password_resets; Type: TABLE; Schema: admin_panel; Owner: admin
+--
+
+CREATE TABLE admin_panel.password_resets (
+    email character varying(255) NOT NULL,
+    token character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE admin_panel.password_resets OWNER TO admin;
+
+--
+-- Name: users; Type: TABLE; Schema: admin_panel; Owner: admin
+--
+
+CREATE TABLE admin_panel.users (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    email_verified_at timestamp(0) without time zone,
+    password character varying(255) NOT NULL,
+    remember_token character varying(100),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE admin_panel.users OWNER TO admin;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: admin_panel; Owner: admin
+--
+
+CREATE SEQUENCE admin_panel.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE admin_panel.users_id_seq OWNER TO admin;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: admin_panel; Owner: admin
+--
+
+ALTER SEQUENCE admin_panel.users_id_seq OWNED BY admin_panel.users.id;
+
+
+--
 -- Name: action_log; Type: TABLE; Schema: detectenv; Owner: admin
 --
 
@@ -469,6 +594,86 @@ ALTER TABLE detectenv.action_type_id_action_seq OWNER TO admin;
 --
 
 ALTER SEQUENCE detectenv.action_type_id_action_seq OWNED BY detectenv.action_type.id_action;
+
+
+--
+-- Name: agency_news_checked; Type: TABLE; Schema: detectenv; Owner: admin
+--
+
+CREATE TABLE detectenv.agency_news_checked (
+    id_news_checked bigint NOT NULL,
+    publication_title character varying NOT NULL,
+    publication_url character varying,
+    publication_datetime timestamp without time zone,
+    publication_tags character varying,
+    publication_external_id bigint,
+    id_trusted_agency integer NOT NULL
+);
+
+
+ALTER TABLE detectenv.agency_news_checked OWNER TO admin;
+
+--
+-- Name: COLUMN agency_news_checked.publication_title; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.agency_news_checked.publication_title IS 'Título do artigo publicado no site da agência de checagem fonte';
+
+
+--
+-- Name: COLUMN agency_news_checked.publication_url; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.agency_news_checked.publication_url IS 'URL para o artigo completo no site da agência de checagem fonte';
+
+
+--
+-- Name: COLUMN agency_news_checked.publication_datetime; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.agency_news_checked.publication_datetime IS 'Data/hora de publicação do artigo no site da agência de checagem fonte';
+
+
+--
+-- Name: COLUMN agency_news_checked.publication_tags; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.agency_news_checked.publication_tags IS 'Tags associadas pela agência de checagem fonte';
+
+
+--
+-- Name: COLUMN agency_news_checked.publication_external_id; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.agency_news_checked.publication_external_id IS 'ID da publicação atribuído pela agência de checagem fonte';
+
+
+--
+-- Name: COLUMN agency_news_checked.id_trusted_agency; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.agency_news_checked.id_trusted_agency IS 'Agência de checagem fonte';
+
+
+--
+-- Name: agency_news_checked_id_news_checked_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
+--
+
+CREATE SEQUENCE detectenv.agency_news_checked_id_news_checked_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE detectenv.agency_news_checked_id_news_checked_seq OWNER TO admin;
+
+--
+-- Name: agency_news_checked_id_news_checked_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
+--
+
+ALTER SEQUENCE detectenv.agency_news_checked_id_news_checked_seq OWNED BY detectenv.agency_news_checked.id_news_checked;
 
 
 --
@@ -1027,6 +1232,27 @@ ALTER SEQUENCE detectenv.user_role_id_user_role_seq OWNED BY detectenv.user_role
 
 
 --
+-- Name: failed_jobs id; Type: DEFAULT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.failed_jobs ALTER COLUMN id SET DEFAULT nextval('admin_panel.failed_jobs_id_seq'::regclass);
+
+
+--
+-- Name: migrations id; Type: DEFAULT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.migrations ALTER COLUMN id SET DEFAULT nextval('admin_panel.migrations_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.users ALTER COLUMN id SET DEFAULT nextval('admin_panel.users_id_seq'::regclass);
+
+
+--
 -- Name: action_log id_action_log; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
 
@@ -1038,6 +1264,13 @@ ALTER TABLE ONLY detectenv.action_log ALTER COLUMN id_action_log SET DEFAULT nex
 --
 
 ALTER TABLE ONLY detectenv.action_type ALTER COLUMN id_action SET DEFAULT nextval('detectenv.action_type_id_action_seq'::regclass);
+
+
+--
+-- Name: agency_news_checked id_news_checked; Type: DEFAULT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.agency_news_checked ALTER COLUMN id_news_checked SET DEFAULT nextval('detectenv.agency_news_checked_id_news_checked_seq'::regclass);
 
 
 --
@@ -1125,6 +1358,46 @@ ALTER TABLE ONLY detectenv.user_role ALTER COLUMN id_user_role SET DEFAULT nextv
 
 
 --
+-- Name: failed_jobs failed_jobs_pkey; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.failed_jobs
+    ADD CONSTRAINT failed_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: failed_jobs failed_jobs_uuid_unique; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.failed_jobs
+    ADD CONSTRAINT failed_jobs_uuid_unique UNIQUE (uuid);
+
+
+--
+-- Name: migrations migrations_pkey; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.migrations
+    ADD CONSTRAINT migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_email_unique; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.users
+    ADD CONSTRAINT users_email_unique UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
+--
+
+ALTER TABLE ONLY admin_panel.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: action_log action_log_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
 --
 
@@ -1138,6 +1411,14 @@ ALTER TABLE ONLY detectenv.action_log
 
 ALTER TABLE ONLY detectenv.action_type
     ADD CONSTRAINT action_type_pkey PRIMARY KEY (id_action);
+
+
+--
+-- Name: agency_news_checked agency_news_checked_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.agency_news_checked
+    ADD CONSTRAINT agency_news_checked_pkey PRIMARY KEY (id_news_checked);
 
 
 --
@@ -1234,6 +1515,13 @@ ALTER TABLE ONLY detectenv.user_account
 
 ALTER TABLE ONLY detectenv.user_role
     ADD CONSTRAINT user_role_pkey PRIMARY KEY (id_user_role);
+
+
+--
+-- Name: password_resets_email_index; Type: INDEX; Schema: admin_panel; Owner: admin
+--
+
+CREATE INDEX password_resets_email_index ON admin_panel.password_resets USING btree (email);
 
 
 --
@@ -1383,6 +1671,14 @@ ALTER TABLE ONLY detectenv.post
 
 ALTER TABLE ONLY detectenv.social_media_account
     ADD CONSTRAINT social_media_social_media_account_fk FOREIGN KEY (id_social_media) REFERENCES detectenv.social_media(id_social_media);
+
+
+--
+-- Name: agency_news_checked trusted_agency_agency_news_checked_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.agency_news_checked
+    ADD CONSTRAINT trusted_agency_agency_news_checked_fk FOREIGN KEY (id_trusted_agency) REFERENCES detectenv.trusted_agency(id_trusted_agency);
 
 
 --
