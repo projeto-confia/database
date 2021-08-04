@@ -1250,7 +1250,8 @@ CREATE TABLE detectenv.checking_outcome (
     id_trusted_agency integer NOT NULL,
     datetime_outcome timestamp without time zone,
     datetime_sent_for_checking timestamp without time zone,
-    is_fake boolean
+    is_fake boolean,
+    trusted_agency_link character varying(5000)
 );
 
 
@@ -1262,6 +1263,11 @@ ALTER TABLE detectenv.checking_outcome OWNER TO admin;
 
 COMMENT ON TABLE detectenv.checking_outcome IS 'Dados de verificação de uma notícia em uma determinada agência de checagem';
 
+--
+-- Name: COLUMN checking_outcome.trusted_agency_link; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.checking_outcome.trusted_agency_link IS 'Link para a página ou artigo da agência de checagem que apresenta informações sobre a fake news.';
 
 --
 -- Name: checking_outcome_id_checking_outcome_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
