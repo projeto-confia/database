@@ -1300,6 +1300,7 @@ ALTER SEQUENCE detectenv.checking_outcome_id_checking_outcome_seq OWNED BY detec
 CREATE TABLE detectenv.news (
     id_news bigint NOT NULL,
     text_news character varying(5000) NOT NULL,
+    text_news_cleaned character varying(5000),
     datetime_publication timestamp without time zone,
     classification_outcome boolean,
     ground_truth_label boolean,
