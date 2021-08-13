@@ -40,438 +40,222 @@ ALTER SCHEMA detectenv OWNER TO admin;
 
 CREATE FUNCTION detectenv.get_news_shared_by_users_with_params_ics() RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision, id_post bigint, id_news bigint, classification_outcome boolean, ground_truth_label boolean)
     LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-begin
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	return query
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	select q.id_social_media_account, q.probalphan, q.probbetan, q.probumalphan, q.probumbetan, post.id_post, news.id_news, news.classification_outcome, news.ground_truth_label from 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	(select * from detectenv.social_media_account as sma
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	where (sma.probalphan != 0.5 or sma.probbetan != 0.5 or sma.probumalphan != 0.5 or sma.probumbetan != 0.5)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	order by id_social_media_account asc) as q, detectenv.news as news, detectenv.post as post
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	where q.id_social_media_account = post.id_social_media_account and post.id_news = news.id_news and news.classification_outcome is null;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-end	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    AS $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+begin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	return query
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	select q.id_social_media_account, q.probalphan, q.probbetan, q.probumalphan, q.probumbetan, post.id_post, news.id_news, news.classification_outcome, news.ground_truth_label from 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	(select * from detectenv.social_media_account as sma
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	where (sma.probalphan != 0.5 or sma.probbetan != 0.5 or sma.probumalphan != 0.5 or sma.probumbetan != 0.5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	order by id_social_media_account asc) as q, detectenv.news as news, detectenv.post as post
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	where q.id_social_media_account = post.id_social_media_account and post.id_news = news.id_news and news.classification_outcome is null;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $$;
 
 
@@ -483,174 +267,90 @@ ALTER FUNCTION detectenv.get_news_shared_by_users_with_params_ics() OWNER TO adm
 
 CREATE FUNCTION detectenv.get_top_users_which_shared_most_fake_news_ics(numusers integer) RETURNS TABLE(id_account_social_media bigint, screen_name character varying, total_fake_news bigint)
     LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-BEGIN
-
-
-
-
-
-
-
-
-
-
-
-	return query
-
-
-
-
-
-
-
-
-
-
-
-	select * from
-
-
-
-
-
-
-
-
-
-
-
-	(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, count(detectenv.news.classification_outcome) as total_fake_news
-
-
-
-
-
-
-
-
-
-
-
-	from detectenv.post
-
-
-
-
-
-
-
-
-
-
-
-	inner join detectenv.social_media_account
-
-
-
-
-
-
-
-
-
-
-
-	 	on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
-
-
-
-
-
-
-
-
-
-
-
-	inner join detectenv.news
-
-
-
-
-
-
-
-
-
-
-
-	 	on detectenv.post.id_news = detectenv.news.id_news
-
-
-
-
-
-
-
-
-
-
-
-	where detectenv.news.classification_outcome = true
-
-
-
-
-
-
-
-
-
-
-
-	group by
-
-
-
-
-
-
-
-
-
-
-
-		detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
-
-
-
-
-
-
-
-
-
-
-
-    order by tbl.total_fake_news desc limit numUsers;
-
-
-
-
-
-
-
-
-
-
-
+    AS $$
+
+
+
+
+
+BEGIN
+
+
+
+
+
+	return query
+
+
+
+
+
+	select * from
+
+
+
+
+
+	(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, count(detectenv.news.classification_outcome) as total_fake_news
+
+
+
+
+
+	from detectenv.post
+
+
+
+
+
+	inner join detectenv.social_media_account
+
+
+
+
+
+	 	on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
+
+
+
+
+
+	inner join detectenv.news
+
+
+
+
+
+	 	on detectenv.post.id_news = detectenv.news.id_news
+
+
+
+
+
+	where detectenv.news.classification_outcome = true
+
+
+
+
+
+	group by
+
+
+
+
+
+		detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
+
+
+
+
+
+    order by tbl.total_fake_news desc limit numUsers;
+
+
+
+
+
 END $$;
 
 
@@ -662,234 +362,120 @@ ALTER FUNCTION detectenv.get_top_users_which_shared_most_fake_news_ics(numusers 
 
 CREATE FUNCTION detectenv.get_top_users_which_shared_news_ics() RETURNS TABLE(id_account_social_media bigint, screen_name character varying, total_news bigint, total_fake_news bigint, total_not_fake_news bigint, rate_fake_news numeric, rate_not_fake_news numeric)
     LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-BEGIN
-
-
-
-
-
-
-
-
-
-
-
-	return query
-
-
-
-
-
-
-
-
-
-
-
-	with tabela as (
-
-
-
-
-
-
-
-
-
-
-
-		(select * from
-
-
-
-
-
-
-
-
-
-
-
-			(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, 
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) as total_news,
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = true) as total_fake_news,
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = false) as total_not_fake_news
-
-
-
-
-
-
-
-
-
-
-
-			from detectenv.post
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.social_media_account
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.news
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_news = detectenv.news.id_news
-
-
-
-
-
-
-
-
-
-
-
-			group by
-
-
-
-
-
-
-
-
-
-
-
-				detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
-
-
-
-
-
-
-
-
-
-
-
-			where tbl.total_news > 0))
-
-
-
-
-
-
-
-
-
-
-
-		select *, ((tabela.total_fake_news::decimal) / (tabela.total_news::decimal)) as rate_fake_news, ((tabela.total_not_fake_news::decimal) / (tabela.total_news::decimal)) as rate_not_fake_news 
-
-
-
-
-
-
-
-
-
-
-
-		from tabela;
-
-
-
-
-
-
-
-
-
-
-
+    AS $$
+
+
+
+
+
+BEGIN
+
+
+
+
+
+	return query
+
+
+
+
+
+	with tabela as (
+
+
+
+
+
+		(select * from
+
+
+
+
+
+			(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, 
+
+
+
+
+
+			 count(detectenv.news.classification_outcome) as total_news,
+
+
+
+
+
+			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = true) as total_fake_news,
+
+
+
+
+
+			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = false) as total_not_fake_news
+
+
+
+
+
+			from detectenv.post
+
+
+
+
+
+			inner join detectenv.social_media_account
+
+
+
+
+
+				on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
+
+
+
+
+
+			inner join detectenv.news
+
+
+
+
+
+				on detectenv.post.id_news = detectenv.news.id_news
+
+
+
+
+
+			group by
+
+
+
+
+
+				detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
+
+
+
+
+
+			where tbl.total_news > 0))
+
+
+
+
+
+		select *, ((tabela.total_fake_news::decimal) / (tabela.total_news::decimal)) as rate_fake_news, ((tabela.total_not_fake_news::decimal) / (tabela.total_news::decimal)) as rate_not_fake_news 
+
+
+
+
+
+		from tabela;
+
+
+
+
+
 END $$;
 
 
@@ -901,246 +487,126 @@ ALTER FUNCTION detectenv.get_top_users_which_shared_news_ics() OWNER TO admin;
 
 CREATE FUNCTION detectenv.get_top_users_which_shared_news_ics(numusers integer) RETURNS TABLE(id_account_social_media bigint, screen_name character varying, total_news bigint, total_fake_news bigint, total_not_fake_news bigint, rate_fake_news numeric, rate_not_fake_news numeric)
     LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-BEGIN
-
-
-
-
-
-
-
-
-
-
-
-	return query
-
-
-
-
-
-
-
-
-
-
-
-	with tabela as (
-
-
-
-
-
-
-
-
-
-
-
-		(select * from
-
-
-
-
-
-
-
-
-
-
-
-			(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, 
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) as total_news,
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = true) as total_fake_news,
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = false) as total_not_fake_news
-
-
-
-
-
-
-
-
-
-
-
-			from detectenv.post
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.social_media_account
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.news
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_news = detectenv.news.id_news
-
-
-
-
-
-
-
-
-
-
-
-			group by
-
-
-
-
-
-
-
-
-
-
-
-				detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
-
-
-
-
-
-
-
-
-
-
-
-			where tbl.total_news > 0) 
-
-
-
-
-
-
-
-
-
-
-
-		limit numusers)
-
-
-
-
-
-
-
-
-
-
-
-	select *, ((tabela.total_fake_news::decimal) / (tabela.total_news::decimal)) as rate_fake_news, ((tabela.total_not_fake_news::decimal) / (tabela.total_news::decimal)) as rate_not_fake_news 
-
-
-
-
-
-
-
-
-
-
-
-	from tabela;
-
-
-
-
-
-
-
-
-
-
-
+    AS $$
+
+
+
+
+
+BEGIN
+
+
+
+
+
+	return query
+
+
+
+
+
+	with tabela as (
+
+
+
+
+
+		(select * from
+
+
+
+
+
+			(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, 
+
+
+
+
+
+			 count(detectenv.news.classification_outcome) as total_news,
+
+
+
+
+
+			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = true) as total_fake_news,
+
+
+
+
+
+			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = false) as total_not_fake_news
+
+
+
+
+
+			from detectenv.post
+
+
+
+
+
+			inner join detectenv.social_media_account
+
+
+
+
+
+				on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
+
+
+
+
+
+			inner join detectenv.news
+
+
+
+
+
+				on detectenv.post.id_news = detectenv.news.id_news
+
+
+
+
+
+			group by
+
+
+
+
+
+				detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
+
+
+
+
+
+			where tbl.total_news > 0) 
+
+
+
+
+
+		limit numusers)
+
+
+
+
+
+	select *, ((tabela.total_fake_news::decimal) / (tabela.total_news::decimal)) as rate_fake_news, ((tabela.total_not_fake_news::decimal) / (tabela.total_news::decimal)) as rate_not_fake_news 
+
+
+
+
+
+	from tabela;
+
+
+
+
+
 END $$;
 
 
@@ -1152,294 +618,150 @@ ALTER FUNCTION detectenv.get_top_users_which_shared_news_ics(numusers integer) O
 
 CREATE FUNCTION detectenv.get_users_which_shared_the_news(id_searched_news bigint) RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision)
     LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-BEGIN
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	RETURN QUERY
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	select detectenv.post.id_social_media_account AS id_social_media_account, detectenv.social_media_account.probalphan, detectenv.social_media_account.probbetan, detectenv.social_media_account.probumalphan, detectenv.social_media_account.probumbetan from detectenv.social_media_account, detectenv.post
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	where detectenv.social_media_account.id_social_media_account = detectenv.post.id_social_media_account and detectenv.post.id_news = id_searched_news and detectenv.social_media_account.id_owner is null;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    AS $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEGIN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	RETURN QUERY
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	select detectenv.post.id_social_media_account AS id_social_media_account, detectenv.social_media_account.probalphan, detectenv.social_media_account.probbetan, detectenv.social_media_account.probumalphan, detectenv.social_media_account.probumbetan from detectenv.social_media_account, detectenv.post
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	where detectenv.social_media_account.id_social_media_account = detectenv.post.id_social_media_account and detectenv.post.id_news = id_searched_news;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $$;
 
 
@@ -1451,342 +773,174 @@ ALTER FUNCTION detectenv.get_users_which_shared_the_news(id_searched_news bigint
 
 CREATE FUNCTION detectenv.insert_update_social_media_account(idsocialmedia integer, idowner integer, screenname character varying, datecreation date, bluebadge boolean, prob_alphan double precision, prob_betan double precision, prob_umalphan double precision, prob_umbetan double precision, idaccountsocialmedia bigint) RETURNS void
     LANGUAGE plpgsql
-    AS $$ 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    DECLARE 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    BEGIN 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		INSERT INTO detectenv.social_media_account(id_social_media, id_owner, screen_name, date_creation, blue_badge, probalphan, probbetan, probumalphan, probumbetan, id_account_social_media) values (idSocialMedia, idOwner, screenName, dateCreation, blueBadge, prob_AlphaN, prob_BetaN, prob_UmAlphaN, prob_UmBetaN, idAccountSocialMedia) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		ON CONFLICT (id_account_social_media) DO 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		UPDATE SET probalphan = prob_AlphaN, probbetan = prob_BetaN, probumalphan = prob_UmAlphaN, probumbetan = prob_UmBetaN WHERE social_media_account.id_account_social_media = idAccountSocialMedia;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    END;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    AS $$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    DECLARE 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    BEGIN 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		INSERT INTO detectenv.social_media_account(id_social_media, id_owner, screen_name, date_creation, blue_badge, probalphan, probbetan, probumalphan, probumbetan, id_account_social_media) values (idSocialMedia, idOwner, screenName, dateCreation, blueBadge, prob_AlphaN, prob_BetaN, prob_UmAlphaN, prob_UmBetaN, idAccountSocialMedia) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		ON CONFLICT (id_account_social_media) DO 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		UPDATE SET probalphan = prob_AlphaN, probbetan = prob_BetaN, probumalphan = prob_UmAlphaN, probumbetan = prob_UmBetaN WHERE social_media_account.id_account_social_media = idAccountSocialMedia;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $$;
 
 
@@ -2137,6 +1291,82 @@ ALTER TABLE detectenv.checking_outcome_id_checking_outcome_seq OWNER TO admin;
 --
 
 ALTER SEQUENCE detectenv.checking_outcome_id_checking_outcome_seq OWNED BY detectenv.checking_outcome.id_checking_outcome;
+
+
+--
+-- Name: curatorship; Type: TABLE; Schema: detectenv; Owner: admin
+--
+
+CREATE TABLE detectenv.curatorship (
+    id_curatorship integer NOT NULL,
+    id_news bigint NOT NULL,
+    id_news_checked bigint,
+    is_news boolean DEFAULT false NOT NULL,
+    is_similar boolean,
+    is_fake_news boolean DEFAULT false NOT NULL,
+    text_note character varying,
+    is_curated boolean DEFAULT false NOT NULL,
+    is_processed boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE detectenv.curatorship OWNER TO admin;
+
+--
+-- Name: COLUMN curatorship.is_news; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.curatorship.is_news IS 'true se o texto da publicação configura uma notícia, false caso contrário.';
+
+
+--
+-- Name: COLUMN curatorship.is_similar; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.curatorship.is_similar IS 'Se id_news_checked não for nulo, o campo torna-se obrigatório';
+
+
+--
+-- Name: COLUMN curatorship.text_note; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.curatorship.text_note IS 'Anotações relevantes sobre a curadoria';
+
+
+--
+-- Name: COLUMN curatorship.is_curated; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.curatorship.is_curated IS 'true se registro já foi curado, false caso contrário. Valor padrão: false';
+
+
+--
+-- Name: COLUMN curatorship.is_processed; Type: COMMENT; Schema: detectenv; Owner: admin
+--
+
+COMMENT ON COLUMN detectenv.curatorship.is_processed IS 'true se registro foi persistido nas tabelas similarity_checking_outcome e checking_outcome, false caso contrário.';
+
+
+--
+-- Name: curatorship_id_curatorship_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
+--
+
+CREATE SEQUENCE detectenv.curatorship_id_curatorship_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE detectenv.curatorship_id_curatorship_seq OWNER TO admin;
+
+--
+-- Name: curatorship_id_curatorship_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
+--
+
+ALTER SEQUENCE detectenv.curatorship_id_curatorship_seq OWNED BY detectenv.curatorship.id_curatorship;
 
 
 --
@@ -2781,6 +2011,13 @@ ALTER TABLE ONLY detectenv.checking_outcome ALTER COLUMN id_checking_outcome SET
 
 
 --
+-- Name: curatorship id_curatorship; Type: DEFAULT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.curatorship ALTER COLUMN id_curatorship SET DEFAULT nextval('detectenv.curatorship_id_curatorship_seq'::regclass);
+
+
+--
 -- Name: news id_news; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
 
@@ -2934,6 +2171,14 @@ ALTER TABLE ONLY detectenv.agency_news_checked
 
 ALTER TABLE ONLY detectenv.checking_outcome
     ADD CONSTRAINT checking_outcome_pkey PRIMARY KEY (id_checking_outcome);
+
+
+--
+-- Name: curatorship curatorship_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.curatorship
+    ADD CONSTRAINT curatorship_pkey PRIMARY KEY (id_curatorship);
 
 
 --
@@ -3125,6 +2370,14 @@ ALTER TABLE ONLY detectenv.action_log
 
 
 --
+-- Name: curatorship agency_news_checked_curatorship_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.curatorship
+    ADD CONSTRAINT agency_news_checked_curatorship_fk FOREIGN KEY (id_news_checked) REFERENCES detectenv.agency_news_checked(id_news_checked);
+
+
+--
 -- Name: similarity_checking_outcome agency_news_checked_similarity_checking_outcome_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
 --
 
@@ -3146,6 +2399,14 @@ ALTER TABLE ONLY detectenv.action_log
 
 ALTER TABLE ONLY detectenv.checking_outcome
     ADD CONSTRAINT news_checking_outcome_fk FOREIGN KEY (id_news) REFERENCES detectenv.news(id_news);
+
+
+--
+-- Name: curatorship news_curatorship_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.curatorship
+    ADD CONSTRAINT news_curatorship_fk FOREIGN KEY (id_news) REFERENCES detectenv.news(id_news);
 
 
 --
