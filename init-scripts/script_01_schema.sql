@@ -1684,19 +1684,19 @@ ALTER FUNCTION detectenv.get_top_users_which_shared_news_ics(numusers integer) O
 -- Name: get_users_which_shared_the_news(bigint); Type: FUNCTION; Schema: detectenv; Owner: admin
 --
 
-CREATE FUNCTION detectenv.get_users_which_shared_the_news(id_searched_news bigint) RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision)
+CREATE FUNCTION detectenv.get_users_which_shared_the_news(id_searched_news bigint) RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision, is_media boolean, is_media_activated boolean)
     LANGUAGE plpgsql
     AS $$
 BEGIN
 	RETURN QUERY
         select detectenv.post.id_social_media_account AS id_social_media_account, detectenv.social_media_account.probalphan, 
         detectenv.social_media_account.probbetan, detectenv.social_media_account.probumalphan, detectenv.social_media_account.probumbetan,
-        detectenv.owner.is_media as is_media, detectenv.owner.is_media_activated as is_media_activated
+        detectenv.owner.is_media, detectenv.owner.is_media_activated
         from detectenv.social_media_account, detectenv.post, detectenv.owner
         where detectenv.social_media_account.id_social_media_account = detectenv.post.id_social_media_account
             and (detectenv.social_media_account.id_owner = detectenv.owner.id_owner or detectenv.social_media_account.id_owner is null)
-            and is_media = false
-            and is_media_activated = false
+            and detectenv.owner.is_media = false
+            and detectenv.owner.is_media_activated = false
             and detectenv.post.id_news = id_searched_news;
 END $$;
 
