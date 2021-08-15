@@ -1,0 +1,1 @@
+docker exec -t confia-db pg_dump --data-only -U admin confia > init-scripts/script_02_data.sql
