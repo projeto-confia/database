@@ -38,17 +38,17 @@ ALTER SCHEMA detectenv OWNER TO admin;
 -- Name: get_news_shared_by_users_with_params_ics(); Type: FUNCTION; Schema: detectenv; Owner: admin
 --
 
-CREATE FUNCTION detectenv.get_news_shared_by_users_with_params_ics() RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision, id_post bigint, id_news bigint, classification_outcome boolean, ground_truth_label boolean)
+CREATE FUNCTION detectenv.get_news_shared_by_users_with_params_ics() RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision, id_post bigint, id_news bigint, classification_outcome boolean, ground_truth_label boolean, prob_classification double precision)
     LANGUAGE plpgsql
     AS $$
 begin
 	return query
     select q.id_social_media_account, q.probalphan, q.probbetan, q.probumalphan, q.probumbetan, post.id_post, news.id_news, 
-        news.classification_outcome, news.ground_truth_label 
+        news.classification_outcome, news.ground_truth_label, news.prob_classification
     from 	    
         (select * from detectenv.social_media_account as sma where (sma.probalphan != 0.5 or sma.probbetan != 0.5 or sma.probumalphan != 0.5 or sma.probumbetan != 0.5)
 	    order by id_social_media_account asc) as q, detectenv.news as news, detectenv.post as post
-	where q.id_social_media_account = post.id_social_media_account and post.id_news = news.id_news and news.classification_outcome is null;
+	where q.id_social_media_account = post.id_social_media_account and post.id_news = news.id_news and news.ground_truth_label is null;
 end	$$;
 
 
