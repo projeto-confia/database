@@ -1583,131 +1583,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: failed_jobs; Type: TABLE; Schema: admin_panel; Owner: admin
---
-
-CREATE TABLE admin_panel.failed_jobs (
-    id bigint NOT NULL,
-    uuid character varying(255) NOT NULL,
-    connection text NOT NULL,
-    queue text NOT NULL,
-    payload text NOT NULL,
-    exception text NOT NULL,
-    failed_at timestamp(0) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
-ALTER TABLE admin_panel.failed_jobs OWNER TO admin;
-
---
--- Name: failed_jobs_id_seq; Type: SEQUENCE; Schema: admin_panel; Owner: admin
---
-
-CREATE SEQUENCE admin_panel.failed_jobs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE admin_panel.failed_jobs_id_seq OWNER TO admin;
-
---
--- Name: failed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: admin_panel; Owner: admin
---
-
-ALTER SEQUENCE admin_panel.failed_jobs_id_seq OWNED BY admin_panel.failed_jobs.id;
-
-
---
--- Name: migrations; Type: TABLE; Schema: admin_panel; Owner: admin
---
-
-CREATE TABLE admin_panel.migrations (
-    id integer NOT NULL,
-    migration character varying(255) NOT NULL,
-    batch integer NOT NULL
-);
-
-
-ALTER TABLE admin_panel.migrations OWNER TO admin;
-
---
--- Name: migrations_id_seq; Type: SEQUENCE; Schema: admin_panel; Owner: admin
---
-
-CREATE SEQUENCE admin_panel.migrations_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE admin_panel.migrations_id_seq OWNER TO admin;
-
---
--- Name: migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: admin_panel; Owner: admin
---
-
-ALTER SEQUENCE admin_panel.migrations_id_seq OWNED BY admin_panel.migrations.id;
-
-
---
--- Name: password_resets; Type: TABLE; Schema: admin_panel; Owner: admin
---
-
-CREATE TABLE admin_panel.password_resets (
-    email character varying(255) NOT NULL,
-    token character varying(255) NOT NULL,
-    created_at timestamp(0) without time zone
-);
-
-
-ALTER TABLE admin_panel.password_resets OWNER TO admin;
-
---
--- Name: users; Type: TABLE; Schema: admin_panel; Owner: admin
---
-
-CREATE TABLE admin_panel.users (
-    id bigint NOT NULL,
-    name character varying(255) NOT NULL,
-    email character varying(255) NOT NULL,
-    email_verified_at timestamp(0) without time zone,
-    password character varying(255) NOT NULL,
-    remember_token character varying(100),
-    created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone
-);
-
-
-ALTER TABLE admin_panel.users OWNER TO admin;
-
---
--- Name: users_id_seq; Type: SEQUENCE; Schema: admin_panel; Owner: admin
---
-
-CREATE SEQUENCE admin_panel.users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE admin_panel.users_id_seq OWNER TO admin;
-
---
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: admin_panel; Owner: admin
---
-
-ALTER SEQUENCE admin_panel.users_id_seq OWNED BY admin_panel.users.id;
-
-
---
 -- Name: action_log; Type: TABLE; Schema: detectenv; Owner: admin
 --
 
@@ -2111,90 +1986,6 @@ ALTER TABLE detectenv.owner_id_owner_seq OWNER TO admin;
 
 ALTER SEQUENCE detectenv.owner_id_owner_seq OWNED BY detectenv.owner.id_owner;
 
-
---
--- Name: permission; Type: TABLE; Schema: detectenv; Owner: admin
---
-
-CREATE TABLE detectenv.permission (
-    id_permission integer NOT NULL,
-    id_permission_type integer NOT NULL,
-    id_role integer NOT NULL
-);
-
-
-ALTER TABLE detectenv.permission OWNER TO admin;
-
---
--- Name: TABLE permission; Type: COMMENT; Schema: detectenv; Owner: admin
---
-
-COMMENT ON TABLE detectenv.permission IS 'Permissões no Painel Administrativo associadas a um perfil';
-
-
---
--- Name: permission_id_permission_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
---
-
-CREATE SEQUENCE detectenv.permission_id_permission_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE detectenv.permission_id_permission_seq OWNER TO admin;
-
---
--- Name: permission_id_permission_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
---
-
-ALTER SEQUENCE detectenv.permission_id_permission_seq OWNED BY detectenv.permission.id_permission;
-
-
---
--- Name: permission_type; Type: TABLE; Schema: detectenv; Owner: admin
---
-
-CREATE TABLE detectenv.permission_type (
-    id_permission_type integer NOT NULL,
-    name_permission character varying(100) NOT NULL
-);
-
-
-ALTER TABLE detectenv.permission_type OWNER TO admin;
-
---
--- Name: TABLE permission_type; Type: COMMENT; Schema: detectenv; Owner: admin
---
-
-COMMENT ON TABLE detectenv.permission_type IS 'Tipos de permissões para o Painel Administrativo';
-
-
---
--- Name: permission_type_id_permission_type_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
---
-
-CREATE SEQUENCE detectenv.permission_type_id_permission_type_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE detectenv.permission_type_id_permission_type_seq OWNER TO admin;
-
---
--- Name: permission_type_id_permission_type_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
---
-
-ALTER SEQUENCE detectenv.permission_type_id_permission_type_seq OWNED BY detectenv.permission_type.id_permission_type;
-
-
 --
 -- Name: post; Type: TABLE; Schema: detectenv; Owner: admin
 --
@@ -2269,48 +2060,6 @@ ALTER TABLE detectenv.post_id_post_seq OWNER TO admin;
 --
 
 ALTER SEQUENCE detectenv.post_id_post_seq OWNED BY detectenv.post.id_post;
-
-
---
--- Name: role; Type: TABLE; Schema: detectenv; Owner: admin
---
-
-CREATE TABLE detectenv.role (
-    id_role integer NOT NULL,
-    name_role character varying(100) NOT NULL
-);
-
-
-ALTER TABLE detectenv.role OWNER TO admin;
-
---
--- Name: TABLE role; Type: COMMENT; Schema: detectenv; Owner: admin
---
-
-COMMENT ON TABLE detectenv.role IS 'Perfis de conta de usuário do Painel Administrativo';
-
-
---
--- Name: role_id_role_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
---
-
-CREATE SEQUENCE detectenv.role_id_role_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE detectenv.role_id_role_seq OWNER TO admin;
-
---
--- Name: role_id_role_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
---
-
-ALTER SEQUENCE detectenv.role_id_role_seq OWNED BY detectenv.role.id_role;
-
 
 --
 -- Name: similarity_checking_outcome; Type: TABLE; Schema: detectenv; Owner: admin
@@ -2515,105 +2264,6 @@ ALTER TABLE detectenv.trusted_agency_id_trusted_agency_seq OWNER TO admin;
 
 ALTER SEQUENCE detectenv.trusted_agency_id_trusted_agency_seq OWNED BY detectenv.trusted_agency.id_trusted_agency;
 
-
---
--- Name: user_account; Type: TABLE; Schema: detectenv; Owner: admin
---
-
-CREATE TABLE detectenv.user_account (
-    id_user_account integer NOT NULL,
-    name_user_account character varying(100) NOT NULL,
-    password character varying(100) NOT NULL
-);
-
-
-ALTER TABLE detectenv.user_account OWNER TO admin;
-
---
--- Name: TABLE user_account; Type: COMMENT; Schema: detectenv; Owner: admin
---
-
-COMMENT ON TABLE detectenv.user_account IS 'Conta de usuário do Painel Administrativo';
-
-
---
--- Name: user_account_id_user_account_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
---
-
-CREATE SEQUENCE detectenv.user_account_id_user_account_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE detectenv.user_account_id_user_account_seq OWNER TO admin;
-
---
--- Name: user_account_id_user_account_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
---
-
-ALTER SEQUENCE detectenv.user_account_id_user_account_seq OWNED BY detectenv.user_account.id_user_account;
-
-
---
--- Name: user_role; Type: TABLE; Schema: detectenv; Owner: admin
---
-
-CREATE TABLE detectenv.user_role (
-    id_user_role integer NOT NULL,
-    id_user_account integer NOT NULL,
-    id_role integer NOT NULL
-);
-
-
-ALTER TABLE detectenv.user_role OWNER TO admin;
-
---
--- Name: user_role_id_user_role_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
---
-
-CREATE SEQUENCE detectenv.user_role_id_user_role_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE detectenv.user_role_id_user_role_seq OWNER TO admin;
-
---
--- Name: user_role_id_user_role_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
---
-
-ALTER SEQUENCE detectenv.user_role_id_user_role_seq OWNED BY detectenv.user_role.id_user_role;
-
-
---
--- Name: failed_jobs id; Type: DEFAULT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.failed_jobs ALTER COLUMN id SET DEFAULT nextval('admin_panel.failed_jobs_id_seq'::regclass);
-
-
---
--- Name: migrations id; Type: DEFAULT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.migrations ALTER COLUMN id SET DEFAULT nextval('admin_panel.migrations_id_seq'::regclass);
-
-
---
--- Name: users id; Type: DEFAULT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.users ALTER COLUMN id SET DEFAULT nextval('admin_panel.users_id_seq'::regclass);
-
-
 --
 -- Name: action_log id_action_log; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
@@ -2662,33 +2312,11 @@ ALTER TABLE ONLY detectenv.news ALTER COLUMN id_news SET DEFAULT nextval('detect
 
 ALTER TABLE ONLY detectenv.owner ALTER COLUMN id_owner SET DEFAULT nextval('detectenv.owner_id_owner_seq'::regclass);
 
-
---
--- Name: permission id_permission; Type: DEFAULT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.permission ALTER COLUMN id_permission SET DEFAULT nextval('detectenv.permission_id_permission_seq'::regclass);
-
-
---
--- Name: permission_type id_permission_type; Type: DEFAULT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.permission_type ALTER COLUMN id_permission_type SET DEFAULT nextval('detectenv.permission_type_id_permission_type_seq'::regclass);
-
-
 --
 -- Name: post id_post; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
 
 ALTER TABLE ONLY detectenv.post ALTER COLUMN id_post SET DEFAULT nextval('detectenv.post_id_post_seq'::regclass);
-
-
---
--- Name: role id_role; Type: DEFAULT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.role ALTER COLUMN id_role SET DEFAULT nextval('detectenv.role_id_role_seq'::regclass);
 
 
 --
@@ -2717,60 +2345,6 @@ ALTER TABLE ONLY detectenv.social_media_account ALTER COLUMN id_social_media_acc
 --
 
 ALTER TABLE ONLY detectenv.trusted_agency ALTER COLUMN id_trusted_agency SET DEFAULT nextval('detectenv.trusted_agency_id_trusted_agency_seq'::regclass);
-
-
---
--- Name: user_account id_user_account; Type: DEFAULT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.user_account ALTER COLUMN id_user_account SET DEFAULT nextval('detectenv.user_account_id_user_account_seq'::regclass);
-
-
---
--- Name: user_role id_user_role; Type: DEFAULT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.user_role ALTER COLUMN id_user_role SET DEFAULT nextval('detectenv.user_role_id_user_role_seq'::regclass);
-
-
---
--- Name: failed_jobs failed_jobs_pkey; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.failed_jobs
-    ADD CONSTRAINT failed_jobs_pkey PRIMARY KEY (id);
-
-
---
--- Name: failed_jobs failed_jobs_uuid_unique; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.failed_jobs
-    ADD CONSTRAINT failed_jobs_uuid_unique UNIQUE (uuid);
-
-
---
--- Name: migrations migrations_pkey; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.migrations
-    ADD CONSTRAINT migrations_pkey PRIMARY KEY (id);
-
-
---
--- Name: users users_email_unique; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.users
-    ADD CONSTRAINT users_email_unique UNIQUE (email);
-
-
---
--- Name: users users_pkey; Type: CONSTRAINT; Schema: admin_panel; Owner: admin
---
-
-ALTER TABLE ONLY admin_panel.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
@@ -2830,35 +2404,11 @@ ALTER TABLE ONLY detectenv.owner
 
 
 --
--- Name: permission permission_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.permission
-    ADD CONSTRAINT permission_pkey PRIMARY KEY (id_permission);
-
-
---
--- Name: permission_type permission_type_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.permission_type
-    ADD CONSTRAINT permission_type_pkey PRIMARY KEY (id_permission_type);
-
-
---
 -- Name: post post_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
 --
 
 ALTER TABLE ONLY detectenv.post
     ADD CONSTRAINT post_pkey PRIMARY KEY (id_post);
-
-
---
--- Name: role role_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.role
-    ADD CONSTRAINT role_pkey PRIMARY KEY (id_role);
 
 
 --
@@ -2894,47 +2444,10 @@ ALTER TABLE ONLY detectenv.trusted_agency
 
 
 --
--- Name: user_account user_account_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.user_account
-    ADD CONSTRAINT user_account_pkey PRIMARY KEY (id_user_account);
-
-
---
--- Name: user_role user_role_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.user_role
-    ADD CONSTRAINT user_role_pkey PRIMARY KEY (id_user_role);
-
-
---
--- Name: password_resets_email_index; Type: INDEX; Schema: admin_panel; Owner: admin
---
-
-CREATE INDEX password_resets_email_index ON admin_panel.password_resets USING btree (email);
-
-
---
--- Name: id_permission_id_role_permission_idx; Type: INDEX; Schema: detectenv; Owner: admin
---
-
-CREATE UNIQUE INDEX id_permission_id_role_permission_idx ON detectenv.permission USING btree (id_permission_type, id_role);
-
-
---
 -- Name: id_social_id_owner_social_media_account_idx; Type: INDEX; Schema: detectenv; Owner: admin
 --
 
 CREATE UNIQUE INDEX id_social_id_owner_social_media_account_idx ON detectenv.social_media_account USING btree (id_social_media, id_owner);
-
-
---
--- Name: id_user_id_role_user_role_idx; Type: INDEX; Schema: detectenv; Owner: admin
---
-
-CREATE UNIQUE INDEX id_user_id_role_user_role_idx ON detectenv.user_role USING btree (id_user_account, id_role);
 
 
 --
@@ -2959,20 +2472,6 @@ CREATE UNIQUE INDEX name_owner_idx ON detectenv.owner USING btree (name_owner);
 
 
 --
--- Name: name_permission_type_idx; Type: INDEX; Schema: detectenv; Owner: admin
---
-
-CREATE UNIQUE INDEX name_permission_type_idx ON detectenv.permission_type USING btree (name_permission);
-
-
---
--- Name: name_role_idx; Type: INDEX; Schema: detectenv; Owner: admin
---
-
-CREATE UNIQUE INDEX name_role_idx ON detectenv.role USING btree (name_role);
-
-
---
 -- Name: name_social_media_idx; Type: INDEX; Schema: detectenv; Owner: admin
 --
 
@@ -2984,13 +2483,6 @@ CREATE UNIQUE INDEX name_social_media_idx ON detectenv.social_media USING btree 
 --
 
 CREATE UNIQUE INDEX name_trusted_agency_idx ON detectenv.trusted_agency USING btree (name_agency);
-
-
---
--- Name: name_user_account_idx; Type: INDEX; Schema: detectenv; Owner: admin
---
-
-CREATE UNIQUE INDEX name_user_account_idx ON detectenv.user_account USING btree (name_user_account);
 
 
 --
@@ -3058,35 +2550,11 @@ ALTER TABLE ONLY detectenv.social_media_account
 
 
 --
--- Name: permission permission_type_permission_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.permission
-    ADD CONSTRAINT permission_type_permission_fk FOREIGN KEY (id_permission_type) REFERENCES detectenv.permission_type(id_permission_type);
-
-
---
 -- Name: post post_id_news_fkey; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
 --
 
 ALTER TABLE ONLY detectenv.post
     ADD CONSTRAINT post_id_news_fkey FOREIGN KEY (id_news) REFERENCES detectenv.news(id_news) NOT VALID;
-
-
---
--- Name: permission role_permission_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.permission
-    ADD CONSTRAINT role_permission_fk FOREIGN KEY (id_role) REFERENCES detectenv.role(id_role);
-
-
---
--- Name: user_role role_user_role_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.user_role
-    ADD CONSTRAINT role_user_role_fk FOREIGN KEY (id_role) REFERENCES detectenv.role(id_role);
 
 
 --
@@ -3119,14 +2587,6 @@ ALTER TABLE ONLY detectenv.agency_news_checked
 
 ALTER TABLE ONLY detectenv.checking_outcome
     ADD CONSTRAINT trusted_agency_checking_outcome_fk FOREIGN KEY (id_trusted_agency) REFERENCES detectenv.trusted_agency(id_trusted_agency);
-
-
---
--- Name: user_role user_account_user_role_fk; Type: FK CONSTRAINT; Schema: detectenv; Owner: admin
---
-
-ALTER TABLE ONLY detectenv.user_role
-    ADD CONSTRAINT user_account_user_role_fk FOREIGN KEY (id_user_account) REFERENCES detectenv.user_account(id_user_account);
 
 
 --
