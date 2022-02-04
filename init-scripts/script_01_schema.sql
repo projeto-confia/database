@@ -1808,9 +1808,9 @@ CREATE TABLE detectenv.curatorship (
     id_curatorship integer NOT NULL,
     id_news bigint NOT NULL,
     id_news_checked bigint,
-    is_news boolean DEFAULT false NOT NULL,
+    is_news boolean,
     is_similar boolean,
-    is_fake_news boolean DEFAULT false NOT NULL,
+    is_fake_news boolean,
     text_note character varying,
     is_curated boolean DEFAULT false NOT NULL,
     is_processed boolean DEFAULT false NOT NULL
