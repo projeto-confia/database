@@ -22,5 +22,4 @@ services:
       - db
 networks:
   default:
-    external:
-      name: confia
+    name: confia
