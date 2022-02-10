@@ -26,6 +26,15 @@ CREATE SCHEMA admin_panel;
 ALTER SCHEMA admin_panel OWNER TO admin;
 
 --
+-- Name: strapi; Type: SCHEMA; Schema: -; Owner: admin
+--
+
+CREATE SCHEMA strapi;
+
+
+ALTER SCHEMA strapi OWNER TO admin;
+
+--
 -- Name: detectenv; Type: SCHEMA; Schema: -; Owner: admin
 --
 
