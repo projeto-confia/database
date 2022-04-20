@@ -350,9 +350,10 @@ CREATE TABLE detectenv.failed_job (
     id_job integer NOT NULL,
     queue character varying(50) NOT NULL,
     queue_description text,
+    payload text NOT NULL,
     attempts integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
     error_message text NOT NULL
 );
 
