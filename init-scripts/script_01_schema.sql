@@ -390,7 +390,7 @@ CREATE TABLE detectenv.job (
     queue character varying(50) NOT NULL,
     queue_description text,
     payload text NOT NULL,
-    attempts integer DEFAULT 1 NOT NULL,
+    attempts integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
