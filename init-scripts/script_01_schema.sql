@@ -16,6 +16,8 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER DATABASE confia SET timezone TO 'Brazil/East';
+
 --
 -- Name: admin_panel; Type: SCHEMA; Schema: -; Owner: admin
 --
@@ -26,15 +28,6 @@ CREATE SCHEMA admin_panel;
 ALTER SCHEMA admin_panel OWNER TO admin;
 
 --
--- Name: strapi; Type: SCHEMA; Schema: -; Owner: admin
---
-
-CREATE SCHEMA strapi;
-
-
-ALTER SCHEMA strapi OWNER TO admin;
-
---
 -- Name: detectenv; Type: SCHEMA; Schema: -; Owner: admin
 --
 
@@ -42,6 +35,15 @@ CREATE SCHEMA detectenv;
 
 
 ALTER SCHEMA detectenv OWNER TO admin;
+
+--
+-- Name: strapi; Type: SCHEMA; Schema: -; Owner: admin
+--
+
+CREATE SCHEMA strapi;
+
+
+ALTER SCHEMA strapi OWNER TO admin;
 
 SET default_tablespace = '';
 
@@ -342,6 +344,84 @@ ALTER SEQUENCE detectenv.curatorship_id_curatorship_seq OWNED BY detectenv.curat
 
 
 --
+-- Name: failed_job; Type: TABLE; Schema: detectenv; Owner: admin
+--
+
+CREATE TABLE detectenv.failed_job (
+    id_failed_job integer NOT NULL,
+    id_job integer NOT NULL,
+    queue character varying(50) NOT NULL,
+    payload text NOT NULL,
+    attempts integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    error_message text NOT NULL
+);
+
+
+ALTER TABLE detectenv.failed_job OWNER TO admin;
+
+--
+-- Name: failed_job_id_failed_job_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
+--
+
+CREATE SEQUENCE detectenv.failed_job_id_failed_job_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE detectenv.failed_job_id_failed_job_seq OWNER TO admin;
+
+--
+-- Name: failed_job_id_failed_job_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
+--
+
+ALTER SEQUENCE detectenv.failed_job_id_failed_job_seq OWNED BY detectenv.failed_job.id_failed_job;
+
+
+--
+-- Name: job; Type: TABLE; Schema: detectenv; Owner: admin
+--
+
+CREATE TABLE detectenv.job (
+    id_job integer NOT NULL,
+    queue character varying(50) NOT NULL,
+    payload text NOT NULL,
+    attempts integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE detectenv.job OWNER TO admin;
+
+--
+-- Name: job_id_job_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
+--
+
+CREATE SEQUENCE detectenv.job_id_job_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE detectenv.job_id_job_seq OWNER TO admin;
+
+--
+-- Name: job_id_job_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
+--
+
+ALTER SEQUENCE detectenv.job_id_job_seq OWNED BY detectenv.job.id_job;
+
+
+--
 -- Name: news; Type: TABLE; Schema: detectenv; Owner: admin
 --
 
@@ -452,6 +532,7 @@ ALTER TABLE detectenv.owner_id_owner_seq OWNER TO admin;
 
 ALTER SEQUENCE detectenv.owner_id_owner_seq OWNED BY detectenv.owner.id_owner;
 
+
 --
 -- Name: post; Type: TABLE; Schema: detectenv; Owner: admin
 --
@@ -526,6 +607,7 @@ ALTER TABLE detectenv.post_id_post_seq OWNER TO admin;
 --
 
 ALTER SEQUENCE detectenv.post_id_post_seq OWNED BY detectenv.post.id_post;
+
 
 --
 -- Name: similarity_checking_outcome; Type: TABLE; Schema: detectenv; Owner: admin
@@ -730,6 +812,7 @@ ALTER TABLE detectenv.trusted_agency_id_trusted_agency_seq OWNER TO admin;
 
 ALTER SEQUENCE detectenv.trusted_agency_id_trusted_agency_seq OWNED BY detectenv.trusted_agency.id_trusted_agency;
 
+
 --
 -- Name: action_log id_action_log; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
@@ -766,6 +849,20 @@ ALTER TABLE ONLY detectenv.curatorship ALTER COLUMN id_curatorship SET DEFAULT n
 
 
 --
+-- Name: failed_job id_failed_job; Type: DEFAULT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.failed_job ALTER COLUMN id_failed_job SET DEFAULT nextval('detectenv.failed_job_id_failed_job_seq'::regclass);
+
+
+--
+-- Name: job id_job; Type: DEFAULT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.job ALTER COLUMN id_job SET DEFAULT nextval('detectenv.job_id_job_seq'::regclass);
+
+
+--
 -- Name: news id_news; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
 
@@ -777,6 +874,7 @@ ALTER TABLE ONLY detectenv.news ALTER COLUMN id_news SET DEFAULT nextval('detect
 --
 
 ALTER TABLE ONLY detectenv.owner ALTER COLUMN id_owner SET DEFAULT nextval('detectenv.owner_id_owner_seq'::regclass);
+
 
 --
 -- Name: post id_post; Type: DEFAULT; Schema: detectenv; Owner: admin
@@ -851,6 +949,30 @@ ALTER TABLE ONLY detectenv.checking_outcome
 
 ALTER TABLE ONLY detectenv.curatorship
     ADD CONSTRAINT curatorship_pkey PRIMARY KEY (id_curatorship);
+
+
+--
+-- Name: failed_job failed_job_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.failed_job
+    ADD CONSTRAINT failed_job_pkey PRIMARY KEY (id_failed_job);
+
+
+--
+-- Name: failed_job id_job_unique; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.failed_job
+    ADD CONSTRAINT id_job_unique UNIQUE (id_job);
+
+
+--
+-- Name: job job_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.job
+    ADD CONSTRAINT job_pkey PRIMARY KEY (id_job);
 
 
 --
@@ -1058,3 +1180,4 @@ ALTER TABLE ONLY detectenv.checking_outcome
 --
 -- PostgreSQL database dump complete
 --
+
