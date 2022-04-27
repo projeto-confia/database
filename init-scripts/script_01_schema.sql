@@ -16,6 +16,8 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER DATABASE confia SET timezone TO 'Brazil/East';
+
 --
 -- Name: admin_panel; Type: SCHEMA; Schema: -; Owner: admin
 --
@@ -349,7 +351,6 @@ CREATE TABLE detectenv.failed_job (
     id_failed_job integer NOT NULL,
     id_job integer NOT NULL,
     queue character varying(50) NOT NULL,
-    queue_description text,
     payload text NOT NULL,
     attempts integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -389,7 +390,6 @@ ALTER SEQUENCE detectenv.failed_job_id_failed_job_seq OWNED BY detectenv.failed_
 CREATE TABLE detectenv.job (
     id_job integer NOT NULL,
     queue character varying(50) NOT NULL,
-    queue_description text,
     payload text NOT NULL,
     attempts integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
