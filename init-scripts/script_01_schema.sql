@@ -970,7 +970,7 @@ ALTER TABLE ONLY detectenv.failed_job
 --
 
 ALTER TABLE ONLY detectenv.checking_outcome
-    ADD CONSTRAINT id_news_co_unique UNIQUE (id_news);
+    ADD CONSTRAINT id_news_co_unique UNIQUE (id_news, id_trusted_agency);
 
 
 --
