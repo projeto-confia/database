@@ -16,8 +16,6 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-ALTER DATABASE confia SET timezone TO 'Brazil/East';
-
 --
 -- Name: admin_panel; Type: SCHEMA; Schema: -; Owner: admin
 --
@@ -965,6 +963,14 @@ ALTER TABLE ONLY detectenv.failed_job
 
 ALTER TABLE ONLY detectenv.failed_job
     ADD CONSTRAINT id_job_unique UNIQUE (id_job);
+
+
+--
+-- Name: checking_outcome id_news_co_unique; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.checking_outcome
+    ADD CONSTRAINT id_news_co_unique UNIQUE (id_news);
 
 
 --
