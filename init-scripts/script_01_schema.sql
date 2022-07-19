@@ -942,6 +942,14 @@ ALTER TABLE ONLY detectenv.checking_outcome
 
 
 --
+-- Name: curatorship curatorship_id_news_uq; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.curatorship
+    ADD CONSTRAINT curatorship_id_news_uq UNIQUE (id_news);
+
+
+--
 -- Name: curatorship curatorship_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
 --
 
@@ -979,6 +987,14 @@ ALTER TABLE ONLY detectenv.checking_outcome
 
 ALTER TABLE ONLY detectenv.job
     ADD CONSTRAINT job_pkey PRIMARY KEY (id_job);
+
+
+--
+-- Name: job job_unique; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.job
+    ADD CONSTRAINT job_unique UNIQUE (queue, payload);
 
 
 --
