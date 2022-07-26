@@ -811,6 +811,52 @@ ALTER TABLE detectenv.trusted_agency_id_trusted_agency_seq OWNER TO admin;
 ALTER SEQUENCE detectenv.trusted_agency_id_trusted_agency_seq OWNED BY detectenv.trusted_agency.id_trusted_agency;
 
 
+-- Table: admin_panel.env_variable
+
+-- DROP TABLE IF EXISTS admin_panel.env_variable;
+
+CREATE TABLE IF NOT EXISTS admin_panel.env_variable
+(
+    id bigint NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(5000) COLLATE pg_catalog."default" NOT NULL,
+    type character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    default_value character varying(5000) COLLATE pg_catalog."default" NOT NULL,
+    value character varying(5000) COLLATE pg_catalog."default" NOT NULL,
+    updated boolean NOT NULL DEFAULT false,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT env_variable_pkey PRIMARY KEY (id),
+    CONSTRAINT env_variable_name_unique UNIQUE (name)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS admin_panel.env_variable
+    OWNER to admin;
+
+--
+
+-- SEQUENCE: admin_panel.env_variable_id_seq
+
+-- DROP SEQUENCE IF EXISTS admin_panel.env_variable_id_seq;
+
+CREATE SEQUENCE IF NOT EXISTS admin_panel.env_variable_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1
+    OWNED BY admin_panel.env_variable.id;
+
+ALTER SEQUENCE admin_panel.env_variable_id_seq
+    OWNER TO admin;
+
+ALTER TABLE ONLY admin_panel.env_variable ALTER COLUMN id SET DEFAULT nextval('admin_panel.env_variable_id_seq'::regclass);
+
+
 --
 -- Name: action_log id_action_log; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
