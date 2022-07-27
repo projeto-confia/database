@@ -5,3 +5,4 @@ pg_backup/*
 .env
 init-scripts/*
 !init-scripts/script_01_schema.sql
+!init-scripts/script_02_env_variable.sql
