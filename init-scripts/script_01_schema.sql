@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.2 (Debian 13.2-1.pgdg100+1)
--- Dumped by pg_dump version 13.2 (Debian 13.2-1.pgdg100+1)
+-- Dumped from database version 13.4 (Debian 13.4-1.pgdg100+1)
+-- Dumped by pg_dump version 13.4 (Debian 13.4-1.pgdg100+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,15 +26,6 @@ CREATE SCHEMA admin_panel;
 ALTER SCHEMA admin_panel OWNER TO admin;
 
 --
--- Name: strapi; Type: SCHEMA; Schema: -; Owner: admin
---
-
-CREATE SCHEMA strapi;
-
-
-ALTER SCHEMA strapi OWNER TO admin;
-
---
 -- Name: detectenv; Type: SCHEMA; Schema: -; Owner: admin
 --
 
@@ -44,1548 +35,13 @@ CREATE SCHEMA detectenv;
 ALTER SCHEMA detectenv OWNER TO admin;
 
 --
--- Name: get_news_shared_by_users_with_params_ics(); Type: FUNCTION; Schema: detectenv; Owner: admin
+-- Name: strapi; Type: SCHEMA; Schema: -; Owner: admin
 --
 
-CREATE FUNCTION detectenv.get_news_shared_by_users_with_params_ics() RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision, id_post bigint, id_news bigint, classification_outcome boolean, ground_truth_label boolean, prob_classification double precision)
-    LANGUAGE plpgsql
-    AS $$
-begin
-	return query
-    select q.id_social_media_account, q.probalphan, q.probbetan, q.probumalphan, q.probumbetan, post.id_post, news.id_news, 
-        news.classification_outcome, news.ground_truth_label, news.prob_classification
-    from 	    
-        (select * from detectenv.social_media_account as sma where (sma.probalphan != 0.5 or sma.probbetan != 0.5 or sma.probumalphan != 0.5 or sma.probumbetan != 0.5)
-	    order by id_social_media_account asc) as q, detectenv.news as news, detectenv.post as post
-	where q.id_social_media_account = post.id_social_media_account and post.id_news = news.id_news and news.ground_truth_label is null;
-end	$$;
+CREATE SCHEMA strapi;
 
 
-ALTER FUNCTION detectenv.get_news_shared_by_users_with_params_ics() OWNER TO admin;
-
---
--- Name: get_top_users_which_shared_most_fake_news_ics(integer); Type: FUNCTION; Schema: detectenv; Owner: admin
---
-
-CREATE FUNCTION detectenv.get_top_users_which_shared_most_fake_news_ics(numusers integer) RETURNS TABLE(id_account_social_media bigint, screen_name character varying, total_fake_news bigint)
-    LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-BEGIN
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	return query
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	select * from
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, count(detectenv.news.classification_outcome) as total_fake_news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	from detectenv.post
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	inner join detectenv.social_media_account
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	 	on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	inner join detectenv.news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	 	on detectenv.post.id_news = detectenv.news.id_news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	where detectenv.news.classification_outcome = true
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	group by
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    order by tbl.total_fake_news desc limit numUsers;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-END $$;
-
-
-ALTER FUNCTION detectenv.get_top_users_which_shared_most_fake_news_ics(numusers integer) OWNER TO admin;
-
---
--- Name: get_top_users_which_shared_news_ics(); Type: FUNCTION; Schema: detectenv; Owner: admin
---
-
-CREATE FUNCTION detectenv.get_top_users_which_shared_news_ics() RETURNS TABLE(id_account_social_media bigint, screen_name character varying, total_news bigint, total_fake_news bigint, total_not_fake_news bigint, rate_fake_news numeric, rate_not_fake_news numeric)
-    LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-BEGIN
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	return query
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	with tabela as (
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		(select * from
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) as total_news,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = true) as total_fake_news,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = false) as total_not_fake_news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			from detectenv.post
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.social_media_account
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_news = detectenv.news.id_news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			group by
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			where tbl.total_news > 0))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		select *, ((tabela.total_fake_news::decimal) / (tabela.total_news::decimal)) as rate_fake_news, ((tabela.total_not_fake_news::decimal) / (tabela.total_news::decimal)) as rate_not_fake_news 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		from tabela;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-END $$;
-
-
-ALTER FUNCTION detectenv.get_top_users_which_shared_news_ics() OWNER TO admin;
-
---
--- Name: get_top_users_which_shared_news_ics(integer); Type: FUNCTION; Schema: detectenv; Owner: admin
---
-
-CREATE FUNCTION detectenv.get_top_users_which_shared_news_ics(numusers integer) RETURNS TABLE(id_account_social_media bigint, screen_name character varying, total_news bigint, total_fake_news bigint, total_not_fake_news bigint, rate_fake_news numeric, rate_not_fake_news numeric)
-    LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-BEGIN
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	return query
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	with tabela as (
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		(select * from
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			(select detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name, 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) as total_news,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = true) as total_fake_news,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			 count(detectenv.news.classification_outcome) filter (where detectenv.news.classification_outcome = false) as total_not_fake_news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			from detectenv.post
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.social_media_account
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_social_media_account = detectenv.social_media_account.id_social_media_account
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			inner join detectenv.news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				on detectenv.post.id_news = detectenv.news.id_news
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			group by
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				detectenv.social_media_account.id_account_social_media, detectenv.social_media_account.screen_name) tbl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			where tbl.total_news > 0) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		limit numusers)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	select *, ((tabela.total_fake_news::decimal) / (tabela.total_news::decimal)) as rate_fake_news, ((tabela.total_not_fake_news::decimal) / (tabela.total_news::decimal)) as rate_not_fake_news 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	from tabela;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-END $$;
-
-
-ALTER FUNCTION detectenv.get_top_users_which_shared_news_ics(numusers integer) OWNER TO admin;
-
---
--- Name: get_users_which_shared_the_news(bigint); Type: FUNCTION; Schema: detectenv; Owner: admin
---
-
-CREATE FUNCTION detectenv.get_users_which_shared_the_news(id_searched_news bigint) RETURNS TABLE(id_social_media_account bigint, probalphan double precision, probbetan double precision, probumalphan double precision, probumbetan double precision, is_media boolean, is_media_activated boolean)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-	RETURN QUERY
-        select detectenv.post.id_social_media_account AS id_social_media_account, detectenv.social_media_account.probalphan, 
-        detectenv.social_media_account.probbetan, detectenv.social_media_account.probumalphan, detectenv.social_media_account.probumbetan,
-        detectenv.owner.is_media, detectenv.owner.is_media_activated
-        from detectenv.social_media_account, detectenv.post, detectenv.owner
-        where detectenv.social_media_account.id_social_media_account = detectenv.post.id_social_media_account
-            and (detectenv.social_media_account.id_owner = detectenv.owner.id_owner or detectenv.social_media_account.id_owner is null)
-            and detectenv.owner.is_media = false
-            and detectenv.owner.is_media_activated = false
-            and detectenv.post.id_news = id_searched_news;
-END $$;
-
-ALTER FUNCTION detectenv.get_users_which_shared_the_news(id_searched_news bigint) OWNER TO admin;
-
---
--- Name: insert_update_social_media_account(integer, integer, character varying, date, boolean, double precision, double precision, double precision, double precision, bigint); Type: FUNCTION; Schema: detectenv; Owner: admin
---
-
-CREATE FUNCTION detectenv.insert_update_social_media_account(idsocialmedia integer, idowner integer, screenname character varying, datecreation date, bluebadge boolean, prob_alphan double precision, prob_betan double precision, prob_umalphan double precision, prob_umbetan double precision, idaccountsocialmedia bigint) RETURNS void
-    LANGUAGE plpgsql
-    AS $$ 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    DECLARE 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    BEGIN 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		INSERT INTO detectenv.social_media_account(id_social_media, id_owner, screen_name, date_creation, blue_badge, probalphan, probbetan, probumalphan, probumbetan, id_account_social_media) values (idSocialMedia, idOwner, screenName, dateCreation, blueBadge, prob_AlphaN, prob_BetaN, prob_UmAlphaN, prob_UmBetaN, idAccountSocialMedia) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		ON CONFLICT (id_account_social_media) DO 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		UPDATE SET probalphan = prob_AlphaN, probbetan = prob_BetaN, probumalphan = prob_UmAlphaN, probumbetan = prob_UmBetaN WHERE social_media_account.id_account_social_media = idAccountSocialMedia;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    END;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    $$;
-
-
-ALTER FUNCTION detectenv.insert_update_social_media_account(idsocialmedia integer, idowner integer, screenname character varying, datecreation date, bluebadge boolean, prob_alphan double precision, prob_betan double precision, prob_umalphan double precision, prob_umbetan double precision, idaccountsocialmedia bigint) OWNER TO admin;
+ALTER SCHEMA strapi OWNER TO admin;
 
 SET default_tablespace = '';
 
@@ -1886,6 +342,84 @@ ALTER SEQUENCE detectenv.curatorship_id_curatorship_seq OWNED BY detectenv.curat
 
 
 --
+-- Name: failed_job; Type: TABLE; Schema: detectenv; Owner: admin
+--
+
+CREATE TABLE detectenv.failed_job (
+    id_failed_job integer NOT NULL,
+    id_job integer NOT NULL,
+    queue character varying(50) NOT NULL,
+    payload text NOT NULL,
+    attempts integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    error_message text NOT NULL
+);
+
+
+ALTER TABLE detectenv.failed_job OWNER TO admin;
+
+--
+-- Name: failed_job_id_failed_job_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
+--
+
+CREATE SEQUENCE detectenv.failed_job_id_failed_job_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE detectenv.failed_job_id_failed_job_seq OWNER TO admin;
+
+--
+-- Name: failed_job_id_failed_job_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
+--
+
+ALTER SEQUENCE detectenv.failed_job_id_failed_job_seq OWNED BY detectenv.failed_job.id_failed_job;
+
+
+--
+-- Name: job; Type: TABLE; Schema: detectenv; Owner: admin
+--
+
+CREATE TABLE detectenv.job (
+    id_job integer NOT NULL,
+    queue character varying(50) NOT NULL,
+    payload text NOT NULL,
+    attempts integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE detectenv.job OWNER TO admin;
+
+--
+-- Name: job_id_job_seq; Type: SEQUENCE; Schema: detectenv; Owner: admin
+--
+
+CREATE SEQUENCE detectenv.job_id_job_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE detectenv.job_id_job_seq OWNER TO admin;
+
+--
+-- Name: job_id_job_seq; Type: SEQUENCE OWNED BY; Schema: detectenv; Owner: admin
+--
+
+ALTER SEQUENCE detectenv.job_id_job_seq OWNED BY detectenv.job.id_job;
+
+
+--
 -- Name: news; Type: TABLE; Schema: detectenv; Owner: admin
 --
 
@@ -1947,7 +481,8 @@ CREATE TABLE detectenv.owner (
     name_owner character varying(100) NOT NULL,
     location character varying(45),
     is_media boolean DEFAULT false NOT NULL,
-    is_media_activated boolean DEFAULT true NOT NULL
+    is_media_activated boolean DEFAULT true NOT NULL,
+    is_reliable boolean DEFAULT true NOT NULL
 );
 
 
@@ -1994,6 +529,7 @@ ALTER TABLE detectenv.owner_id_owner_seq OWNER TO admin;
 --
 
 ALTER SEQUENCE detectenv.owner_id_owner_seq OWNED BY detectenv.owner.id_owner;
+
 
 --
 -- Name: post; Type: TABLE; Schema: detectenv; Owner: admin
@@ -2069,6 +605,7 @@ ALTER TABLE detectenv.post_id_post_seq OWNER TO admin;
 --
 
 ALTER SEQUENCE detectenv.post_id_post_seq OWNED BY detectenv.post.id_post;
+
 
 --
 -- Name: similarity_checking_outcome; Type: TABLE; Schema: detectenv; Owner: admin
@@ -2273,6 +810,53 @@ ALTER TABLE detectenv.trusted_agency_id_trusted_agency_seq OWNER TO admin;
 
 ALTER SEQUENCE detectenv.trusted_agency_id_trusted_agency_seq OWNED BY detectenv.trusted_agency.id_trusted_agency;
 
+
+-- Table: admin_panel.env_variable
+
+-- DROP TABLE IF EXISTS admin_panel.env_variable;
+
+CREATE TABLE IF NOT EXISTS admin_panel.env_variable
+(
+    id bigint NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(5000) COLLATE pg_catalog."default" NOT NULL,
+    type character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    default_value character varying(5000) COLLATE pg_catalog."default" NOT NULL,
+    value character varying(5000) COLLATE pg_catalog."default" NOT NULL,
+    updated boolean NOT NULL DEFAULT false,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    CONSTRAINT env_variable_pkey PRIMARY KEY (id),
+    CONSTRAINT env_variable_name_unique UNIQUE (name)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS admin_panel.env_variable
+    OWNER to admin;
+
+--
+
+-- SEQUENCE: admin_panel.env_variable_id_seq
+
+-- DROP SEQUENCE IF EXISTS admin_panel.env_variable_id_seq;
+
+CREATE SEQUENCE IF NOT EXISTS admin_panel.env_variable_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1
+    OWNED BY admin_panel.env_variable.id;
+
+ALTER SEQUENCE admin_panel.env_variable_id_seq
+    OWNER TO admin;
+
+ALTER TABLE ONLY admin_panel.env_variable ALTER COLUMN id SET DEFAULT nextval('admin_panel.env_variable_id_seq'::regclass);
+
+
 --
 -- Name: action_log id_action_log; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
@@ -2309,6 +893,20 @@ ALTER TABLE ONLY detectenv.curatorship ALTER COLUMN id_curatorship SET DEFAULT n
 
 
 --
+-- Name: failed_job id_failed_job; Type: DEFAULT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.failed_job ALTER COLUMN id_failed_job SET DEFAULT nextval('detectenv.failed_job_id_failed_job_seq'::regclass);
+
+
+--
+-- Name: job id_job; Type: DEFAULT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.job ALTER COLUMN id_job SET DEFAULT nextval('detectenv.job_id_job_seq'::regclass);
+
+
+--
 -- Name: news id_news; Type: DEFAULT; Schema: detectenv; Owner: admin
 --
 
@@ -2320,6 +918,7 @@ ALTER TABLE ONLY detectenv.news ALTER COLUMN id_news SET DEFAULT nextval('detect
 --
 
 ALTER TABLE ONLY detectenv.owner ALTER COLUMN id_owner SET DEFAULT nextval('detectenv.owner_id_owner_seq'::regclass);
+
 
 --
 -- Name: post id_post; Type: DEFAULT; Schema: detectenv; Owner: admin
@@ -2389,11 +988,59 @@ ALTER TABLE ONLY detectenv.checking_outcome
 
 
 --
+-- Name: curatorship curatorship_id_news_uq; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.curatorship
+    ADD CONSTRAINT curatorship_id_news_uq UNIQUE (id_news);
+
+
+--
 -- Name: curatorship curatorship_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
 --
 
 ALTER TABLE ONLY detectenv.curatorship
     ADD CONSTRAINT curatorship_pkey PRIMARY KEY (id_curatorship);
+
+
+--
+-- Name: failed_job failed_job_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.failed_job
+    ADD CONSTRAINT failed_job_pkey PRIMARY KEY (id_failed_job);
+
+
+--
+-- Name: failed_job id_job_unique; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.failed_job
+    ADD CONSTRAINT id_job_unique UNIQUE (id_job);
+
+
+--
+-- Name: checking_outcome id_news_co_unique; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.checking_outcome
+    ADD CONSTRAINT id_news_co_unique UNIQUE (id_news, id_trusted_agency);
+
+
+--
+-- Name: job job_pkey; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.job
+    ADD CONSTRAINT job_pkey PRIMARY KEY (id_job);
+
+
+--
+-- Name: job job_unique; Type: CONSTRAINT; Schema: detectenv; Owner: admin
+--
+
+ALTER TABLE ONLY detectenv.job
+    ADD CONSTRAINT job_unique UNIQUE (queue, payload);
 
 
 --
